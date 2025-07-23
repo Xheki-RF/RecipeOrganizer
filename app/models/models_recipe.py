@@ -39,7 +39,7 @@ class Recipe(SQLModel, table=True):
 
     user: Optional[User] = Relationship(back_populates="recipes")
     category: Optional[Category] = Relationship(back_populates="recipes")
-    ingredients: list["Ingredient"] = Relationship(back_populates="ingridient")
+    ingredients: list["Ingredient"] = Relationship(back_populates="recipe")
 
 
 class Ingredient(SQLModel, table=True):
