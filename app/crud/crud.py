@@ -35,7 +35,7 @@ def get_users(session: Session) -> list[schemas.User]:
     return all_users
 
 
-def update_user_data(user_id: UUID, data: schemas.UpdateUser, session: Session) -> User:
+def update_user_data(user_id: UUID, data: schemas.UpdateUser, session: Session) -> schemas.User:
     user_to_update = session.exec(select(User).where(User.id == user_id)).first()
 
     if not user_to_update:
@@ -55,3 +55,9 @@ def update_user_data(user_id: UUID, data: schemas.UpdateUser, session: Session) 
     session.refresh(user_to_update)
 
     return user_to_update
+
+
+def get_user(user_id: UUID, session: Session) -> schemas.User:
+    user_to_get = session.exec(select(User).where(User.id == user_id)).first()
+
+    return user_to_get
