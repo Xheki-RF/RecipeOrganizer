@@ -1,12 +1,11 @@
 from sqlmodel import Session, select
-from schemas.schemas_recipe import *
+import schemas.schemas_recipe as schemas
 from uuid import UUID
-from db.db import get_session
 from fastapi import HTTPException, status
 from models.models_recipe import User
 
 
-def create_new_user(user: CreateUser, session: Session) -> User:
+def create_new_user(user: schemas.CreateUser, session: Session) -> schemas.User:
     existing_user = session.exec(select(User).where(User.email == user.email)).first()
 
     if existing_user:
@@ -28,3 +27,31 @@ def delete_user(user_id: UUID, session: Session) -> str:
     session.commit()
 
     return f"User {user_to_delete.username} with ID {user_to_delete.id} has been deleted"
+
+
+def get_users(session: Session) -> list[schemas.User]:
+    all_users = session.exec(select(User)).all()
+
+    return all_users
+
+
+def update_user_data(user_id: UUID, data: schemas.UpdateUser, session: Session) -> User:
+    user_to_update = session.exec(select(User).where(User.id == user_id)).first()
+
+    if not user_to_update:
+        raise ValueError("User not found.")
+
+    if data.username:
+        user_to_update.username = data.username
+
+    if data.email:
+        user_to_update.email = data.email
+
+    if data.password:
+        user_to_update.password = data.password
+
+    session.add(user_to_update)
+    session.commit()
+    session.refresh(user_to_update)
+
+    return user_to_update
