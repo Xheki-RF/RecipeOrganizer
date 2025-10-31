@@ -166,3 +166,4 @@ cython_debug/
 test.db
 test.db
 .vscode/settings.json
+db_folder

@@ -3,6 +3,7 @@ import schemas.schemas_recipe as schemas
 from uuid import UUID
 from fastapi import HTTPException, status
 from models.models_recipe import User
+import bcrypt
 
 
 def create_new_user(user: schemas.CreateUser, session: Session) -> schemas.User:
@@ -10,8 +11,9 @@ def create_new_user(user: schemas.CreateUser, session: Session) -> schemas.User:
 
     if existing_user:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "The user with this email already exists.")
-    
+
     new_user = User(**user.model_dump())
+    new_user.password = bcrypt.hashpw(new_user.password, bcrypt.gensalt(12))
 
     session.add(new_user)
     session.commit()
