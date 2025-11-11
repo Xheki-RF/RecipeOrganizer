@@ -1,8 +1,8 @@
-import crud.crud as crud_operations
+import app.crud.crud as crud_operations
 from fastapi import Depends, APIRouter
-from schemas.schemas_recipe import CreateUser, User, UpdateUser
+from app.schemas.schemas_recipe import CreateUser, User, UpdateUser
 from sqlmodel import Session
-from db.db import get_session
+from app.db.db import get_session
 from uuid import UUID
 
 user_router = APIRouter(prefix="/users")

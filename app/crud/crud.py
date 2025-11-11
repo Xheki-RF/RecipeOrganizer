@@ -1,8 +1,8 @@
 from sqlmodel import Session, select
-import schemas.schemas_recipe as schemas
+import app.schemas.schemas_recipe as schemas
 from uuid import UUID
 from fastapi import HTTPException, status
-from models.models_recipe import User
+from app.models.models_recipe import User
 import bcrypt
 
 

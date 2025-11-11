@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 import uvicorn
-from db.db import init_db
+from app.db.db import init_db
 from contextlib import asynccontextmanager
-from api.user_endpoints import *
+from app.api.user_endpoints import *
 
 
 @asynccontextmanager

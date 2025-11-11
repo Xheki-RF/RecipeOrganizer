@@ -3,7 +3,7 @@ services:
     image: postgres:17.2
     container_name: recipe_db
     environment:
-      - POSTGRES_USER=user_name
+      - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=db_name
     ports:
