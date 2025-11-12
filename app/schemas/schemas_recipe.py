@@ -2,23 +2,28 @@ from pydantic import EmailStr, BaseModel, field_validator, model_validator
 from uuid import UUID
 from typing import Optional
 
-class CreateUser(BaseModel):
+
+class BaseUser(BaseModel):
     username: str
     email: EmailStr
+
+
+class CreateUser(BaseUser):
     password: str
 
     @field_validator("username")
     def capitalize(cls, value):
         return value.title()
-    
+
     @field_validator("password")
     def length_check(cls, value):
         if len(value) <= 7:
             raise ValueError("the password must be at least 8 symbols long.")
-        
+
         return value
 
-class User(CreateUser):
+
+class User(BaseUser):
     id: UUID
 
 

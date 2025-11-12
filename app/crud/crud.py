@@ -21,7 +21,6 @@ def create_new_user(user: schemas.CreateUser, session: Session) -> schemas.User:
 
     return new_user
 
-
 def delete_user(user_id: UUID, session: Session) -> str:
     user_to_delete = session.exec(select(User).where(User.id == user_id)).first()
 
@@ -50,7 +49,7 @@ def update_user_data(user_id: UUID, data: schemas.UpdateUser, session: Session) 
         user_to_update.email = data.email
 
     if data.password:
-        user_to_update.password = data.password
+        user_to_update.password = bcrypt.hashpw(data.password, bcrypt.gensalt(12))
 
     session.add(user_to_update)
     session.commit()
