@@ -41,3 +41,31 @@ class UpdateUser(BaseModel):
             raise ValueError("when changing email, password must be provided.")
         
         return self
+
+
+class BaseRecipe(BaseModel):
+    title: str
+    description: str
+    category_id: UUID
+
+
+class CreateRecipe(BaseRecipe):
+    user_id: UUID
+
+
+class Recipe(CreateRecipe):
+    id: UUID
+
+
+class UpdateRecipe(BaseModel):
+    title: Optional[str] | None = None
+    description: Optional[str] | None = None
+    category_id: Optional[UUID] | None = None
+    id: UUID
+
+    @model_validator(mode="after")
+    def validate_update(self):
+        if not self.title and not self.description and not self.category_id:
+            raise ValueError("data was not provided")
+        
+        return self

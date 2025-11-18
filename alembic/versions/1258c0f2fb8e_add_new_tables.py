@@ -10,6 +10,7 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 import sqlmodel
+import uuid
 
 
 # revision identifiers, used by Alembic.
@@ -28,6 +29,35 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_category_name'), 'category', ['name'], unique=True)
+
+    category_table = sa.table(
+        "category",
+        sa.column("id", sa.Uuid),
+        sa.column(
+            "name",
+            sa.Enum(
+                "BREAKFAST",
+                "LUNCH",
+                "DINNER",
+                "SUPPER",
+                "DESSERT",
+                "SNACK",
+                name="categoryenum",
+            ),
+        ),
+    )
+
+    categories = [
+        {"id": uuid.uuid4(), "name": "BREAKFAST"},
+        {"id": uuid.uuid4(), "name": "LUNCH"},
+        {"id": uuid.uuid4(), "name": "DINNER"},
+        {"id": uuid.uuid4(), "name": "SUPPER"},
+        {"id": uuid.uuid4(), "name": "DESSERT"},
+        {"id": uuid.uuid4(), "name": "SNACK"},
+    ]
+
+    op.bulk_insert(category_table, categories)
+
     op.create_table('user',
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.Column('username', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
