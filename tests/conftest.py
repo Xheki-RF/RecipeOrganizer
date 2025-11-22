@@ -1,6 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
-from app.main import app
+from main import app
 from sqlmodel import SQLModel, Session, create_engine
 from app.db.db import get_session
 from sqlalchemy.pool import StaticPool
@@ -29,7 +29,14 @@ def setup_database():
     SQLModel.metadata.drop_all(ram_engine)
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def client():
     with TestClient(app) as c:
         yield c
+
+
+user_data_one = {
+        "username": "Jane Doe",
+        "email": "zenlesszone@gmail.com",
+        "password": "furrylover"
+    }

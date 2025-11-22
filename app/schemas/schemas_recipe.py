@@ -61,7 +61,6 @@ class UpdateRecipe(BaseModel):
     title: Optional[str] | None = None
     description: Optional[str] | None = None
     category_id: Optional[UUID] | None = None
-    id: UUID
 
     @model_validator(mode="after")
     def validate_update(self):

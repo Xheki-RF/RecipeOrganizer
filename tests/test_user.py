@@ -2,15 +2,17 @@ from app.schemas.schemas_recipe import User
 from uuid import UUID
 import bcrypt
 
+from tests.conftest import user_data_one
+
 # Test №1: Create user
 def test_create_user(client):
-    user_data = {
-        "username": "Jane Doe",
-        "email": "zenlesszone@gmail.com",
-        "password": "furrylover"
-    }
+    # user_data = {
+    #     "username": "Jane Doe",
+    #     "email": "zenlesszone@gmail.com",
+    #     "password": "furrylover"
+    # }
 
-    response = client.post("/users/create_user", json=user_data)
+    response = client.post("/users/create_user", json=user_data_one)
 
     assert response.status_code == 200
 

@@ -90,8 +90,8 @@ def get_user_recipes(user_id: UUID, session: Session) -> list[Recipe]:
     return user_recipes
 
 
-def update_user_recipe(user_id: UUID, recipe_data: schemas.UpdateRecipe, session: Session) -> schemas.Recipe:
-    recipe_to_update = session.exec(select(Recipe).where((Recipe.user_id == user_id) & (Recipe.id == recipe_data.id))).first()
+def update_user_recipe(recipe_id: UUID, recipe_data: schemas.UpdateRecipe, session: Session) -> schemas.Recipe:
+    recipe_to_update = session.exec(select(Recipe).where(Recipe.id == recipe_id)).first()
 
     if recipe_data.title:
         recipe_to_update.title = recipe_data.title
@@ -107,3 +107,9 @@ def update_user_recipe(user_id: UUID, recipe_data: schemas.UpdateRecipe, session
     session.refresh(recipe_to_update)
 
     return recipe_to_update
+
+
+def get_user_recipe(recipe_id: UUID, session: Session) -> schemas.Recipe:
+    user_recipe = session.exec(select(Recipe).where(Recipe.id == recipe_id)).first()
+    
+    return user_recipe
