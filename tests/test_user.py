@@ -1,18 +1,10 @@
 from app.schemas.schemas_recipe import User
 from uuid import UUID
-import bcrypt
 
-from tests.conftest import user_data_one
 
 # Test №1: Create user
-def test_create_user(client):
-    # user_data = {
-    #     "username": "Jane Doe",
-    #     "email": "zenlesszone@gmail.com",
-    #     "password": "furrylover"
-    # }
-
-    response = client.post("/users/create_user", json=user_data_one)
+def test_create_user(client, create_users):
+    response = client.post("/users/create_user", json=create_users())
 
     assert response.status_code == 200
 
@@ -22,15 +14,10 @@ def test_create_user(client):
     assert user.email == "zenlesszone@gmail.com"
     assert isinstance(user.id, UUID)
 
-# Test №2: Get user by ID
-def test_get_user(client):
-    user_data = {
-        "username": "Jane Doe",
-        "email": "zenlesszone@gmail.com",
-        "password": "furrylover",
-    }
 
-    response = client.post("/users/create_user", json=user_data)
+# Test №2: Get user by ID
+def test_get_user(client, create_users):
+    response = client.post("/users/create_user", json=create_users())
 
     assert response.status_code == 200
 
@@ -45,41 +32,21 @@ def test_get_user(client):
     assert user.username == "Jane Doe"
     assert user.email == "zenlesszone@gmail.com"
 
+
 # Test №3: Get a list of all users
-def test_get_users(client):
-    user_data_1 = {
-        "username": "Jane Doe",
-        "email": "zenlesszone@gmail.com",
-        "password": "furrylover",
-    }
+def test_get_users(client, create_users):
+    for data in create_users(False):
+        response = client.post("/users/create_user", json=data)
 
-    response_1 = client.post("/users/create_user", json=user_data_1)
-
-    assert response_1.status_code == 200
-
-    user_data_2 = {
-        "username": "Avian Birb",
-        "email": "birb69@gmail.com",
-        "password": "avianlover",
-    }
-
-    response_2 = client.post("/users/create_user", json=user_data_2)
-
-    assert response_2.status_code == 200
+        assert response.status_code == 200
 
     response_get = client.get("/users/get_users")
 
     assert response_get.status_code == 200
 
 # Test №4: Delete user
-def test_delete_user(client):
-    user_data = {
-        "username": "Jane Doe",
-        "email": "zenlesszone@gmail.com",
-        "password": "furrylover",
-    }
-
-    response = client.post("/users/create_user", json=user_data)
+def test_delete_user(client, create_users):
+    response = client.post("/users/create_user", json=create_users())
 
     assert response.status_code == 200
 
@@ -91,14 +58,8 @@ def test_delete_user(client):
     assert delete_response.json() == f"User {data["username"]} with ID {data["id"]} has been deleted"
 
 # Test №5: Update user data
-def test_update_user(client):
-    user_data = {
-        "username": "Jane Doe",
-        "email": "zenlesszone@gmail.com",
-        "password": "furrylover",
-    }
-
-    response = client.post("/users/create_user", json=user_data)
+def test_update_user(client, create_users):
+    response = client.post("/users/create_user", json=create_users())
 
     assert response.status_code == 200
 

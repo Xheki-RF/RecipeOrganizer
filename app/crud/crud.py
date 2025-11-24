@@ -66,6 +66,12 @@ def get_user(user_id: UUID, session: Session) -> schemas.User:
 
 
 def add_recipe(recipe_data: schemas.CreateRecipe, session: Session) -> schemas.Recipe:
+    existing_recipe = session.exec(select(Recipe).where((Recipe.user_id == recipe_data.user_id) & 
+                                                        (Recipe.title == recipe_data.title))).first()
+    
+    if existing_recipe:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"The recipe with title '{recipe_data.title}' already exists.")
+    
     new_recipe = Recipe(**recipe_data.model_dump())
 
     session.add(new_recipe)

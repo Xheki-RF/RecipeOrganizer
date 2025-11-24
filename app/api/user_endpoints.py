@@ -5,6 +5,7 @@ from sqlmodel import Session
 from app.db.db import get_session
 from uuid import UUID
 
+
 user_router = APIRouter(prefix="/users")
 
 

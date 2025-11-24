@@ -8,6 +8,7 @@ from uuid import UUID
 
 recipe_router = APIRouter(prefix="/recipe")
 
+
 @recipe_router.post("/add_recipe")
 def add_recipe(recipe: CreateRecipe, session: Session = Depends(get_session)) -> Recipe:
     return crud.add_recipe(recipe, session)

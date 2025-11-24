@@ -7,17 +7,22 @@ from enum import Enum
 import sqlalchemy as sa
 from sqlalchemy.orm import backref
 
+
+def get_local_time():
+    return datetime.now()
+
+
 class User(SQLModel, table=True):
     id: Optional[UUID] = Field(default_factory=uuid.uuid4, primary_key=True)
     username: str
     email: str
     password: str
 
-    date_created: datetime = Field(default_factory=datetime.now)
+    date_created: datetime = Field(default_factory=get_local_time)
     last_updated: datetime = Field(sa_column=sa.Column(
         sa.DateTime, 
-        default=datetime.now(timezone.utc), 
-        onupdate=datetime.now(timezone.utc)
+        default=get_local_time, 
+        onupdate=get_local_time
         )
     )
 
@@ -48,12 +53,12 @@ class Recipe(SQLModel, table=True):
     user_id: UUID = Field(foreign_key="user.id", )
     category_id: UUID = Field(foreign_key="category.id")
 
-    date_added: datetime = Field(default_factory=datetime.now)
+    date_added: datetime = Field(default_factory=get_local_time)
     last_updated: datetime = Field(
         sa_column=sa.Column(
             sa.DateTime,
-            default=datetime.now(timezone.utc),
-            onupdate=datetime.now(timezone.utc)
+            default=get_local_time,
+            onupdate=get_local_time
         )
     )
 
