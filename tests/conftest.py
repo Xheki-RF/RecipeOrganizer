@@ -1,11 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
-from sqlmodel import SQLModel, Session, create_engine
+from sqlmodel import SQLModel, Session, create_engine, select
 from app.db.db import get_session
 from sqlalchemy.pool import StaticPool
 from app.models.models_recipe import User, Ingredient, Category, Recipe
 import app.db.db as db_module
+from app.db.db import get_session
+from app.models.models_recipe import Category, CategoryEnum
 
 
 # Use a temporary in-memory database for tests
@@ -25,6 +27,13 @@ app.dependency_overrides[get_session] = override_get_session
 @pytest.fixture(scope="function", autouse=True)
 def setup_database():
     SQLModel.metadata.create_all(ram_engine)
+
+    with Session(ram_engine) as session:
+        for c in CategoryEnum:
+            session.add(Category(name=c))
+            
+        session.commit()
+
     yield
     SQLModel.metadata.drop_all(ram_engine)
 
@@ -65,25 +74,37 @@ def create_users():
 
 
 @pytest.fixture(scope="function")
-def add_recipe():
+def get_category_id():
+    def _get_category_id(category_name):
+        session: Session = next(get_session())
+        
+        category_id = session.exec(select(Category).where(Category.name == category_name)).first()
+
+        return str(category_id.id)
+    
+    return _get_category_id
+
+
+@pytest.fixture(scope="function")
+def add_recipe(get_category_id):
     def _add_recipe(single=True):
         if single:
             recipes_data = {
                 "title": "Bread",
                 "description": "Allows you to make a fluffy bread",
-                "category_id": "c0a03644-b2c7-4c71-bb31-fa4358c36f45",
+                "category_id": get_category_id("breakfast"),
             }
         else:
             recipes_data = [
                 {
                     "title": "Bread",
                     "description": "Allows you to make a fluffy bread",
-                    "category_id": "c0a03644-b2c7-4c71-bb31-fa4358c36f45",
+                    "category_id": get_category_id("breakfast"),
                 },
                 {
                     "title": "Chocolate",
                     "description": "Allows you to make a milk chocolate",
-                    "category_id": "1dd2c417-45c6-4875-a8ff-d5c1621c5804",
+                    "category_id": get_category_id("lunch"),
                 },
             ]
 
