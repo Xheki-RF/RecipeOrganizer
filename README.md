@@ -20,7 +20,7 @@ http://127.0.0.1:8011/docs
 In order to launch tests, after setting environment variables above, type in terminal (we need to create environment and install all dependencies):
 ```powershell
 python -m venv venv
-python venv\Scripts\activate
+python venv\Scripts\activate (alternatively you can use venv\Scripts\Activate.ps1)
 pip install -r requirements.txt
 pytest -v
 ```
