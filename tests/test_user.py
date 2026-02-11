@@ -23,7 +23,7 @@ def test_get_user(client, create_users):
 
     data = response.json()
 
-    response_get = client.get(f"/users/get_user/{data["id"]}")
+    response_get = client.get(f"/users/get_user/{data['id']}")
 
     assert response_get.status_code == 200
 
@@ -52,10 +52,10 @@ def test_delete_user(client, create_users):
 
     data = response.json()
 
-    delete_response = client.delete(f"/users/delete_user/{data["id"]}")
+    delete_response = client.delete(f"/users/delete_user/{data['id']}")
 
     assert delete_response.status_code == 200
-    assert delete_response.json() == f"User {data["username"]} with ID {data["id"]} has been deleted"
+    assert delete_response.json() == f"User {data['username']} with ID {data['id']} has been deleted"
 
 # Test №5: Update user data
 def test_update_user(client, create_users):
@@ -68,12 +68,12 @@ def test_update_user(client, create_users):
     new_username = {"username": "Jade Joe"}
     new_name_password = {"username": "Jode Joe", "password": "Goyda369"}
 
-    response_update = client.patch(f"/users/update_user_data/{data["id"]}", json=new_username)
+    response_update = client.patch(f"/users/update_user_data/{data['id']}", json=new_username)
 
     assert response_update.status_code == 200
     assert response_update.json()["username"] == "Jade Joe"
 
-    response_update = client.patch(f"/users/update_user_data/{data["id"]}", json=new_name_password)
+    response_update = client.patch(f"/users/update_user_data/{data['id']}", json=new_name_password)
 
     assert response_update.status_code == 200
     assert response_update.json()["username"] == "Jode Joe"

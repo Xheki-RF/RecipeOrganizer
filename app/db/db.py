@@ -4,18 +4,26 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DB_URL = os.getenv("DB_URL")
+engine = None
+  
 
-if DB_URL is None:
-    try:
-        # For pytest
-        DB_URL = f"postgresql://{os.environ['POSTGRES_USER']}:{os.environ['POSTGRES_PASSWORD']}@localhost/{os.environ['POSTGRES_DB']}"
-    except:
+def get_engine():
+    global engine
+
+    if engine is not None:
+        return engine
+
+    db_url = os.getenv("DB_URL")
+
+    if not db_url:
         raise ValueError("DB_URL environment variable is not set!")
 
-engine = create_engine(DB_URL, echo=False)
+    engine = create_engine(db_url, echo=False)
+    return engine
+
 
 def init_db():
+    engine = get_engine()
     SQLModel.metadata.create_all(engine)
 
 
