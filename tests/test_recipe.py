@@ -35,10 +35,10 @@ def test_delete_recipe(client, create_users, add_recipe):
 
     data = response_recipe.json()
 
-    response_delete_recipe = client.delete(f"/recipe/delete_recipe/{data["id"]}")
+    response_delete_recipe = client.delete(f"/recipe/delete_recipe/{data['id']}")
 
     assert response_delete_recipe.status_code == 200
-    assert response_delete_recipe.json() == f"Recipe {data["title"]} with ID {data["id"]} has been deleted"
+    assert response_delete_recipe.json() == f"Recipe {data['title']} with ID {data['id']} has been deleted"
 
 
 # Test №3: Get user's recipes
@@ -58,7 +58,7 @@ def test_get_user_recipes(client, create_users, add_recipe):
 
     data = response_user.json()
 
-    response_get_recipe = client.get(f"/recipe/get_user_recipes/{data["id"]}")
+    response_get_recipe = client.get(f"/recipe/get_user_recipes/{data['id']}")
 
     assert response_get_recipe.status_code == 200
 
@@ -87,15 +87,15 @@ def test_update_user_recipe(client, create_users, add_recipe):
 
     new_recipe_data = response_recipe.json()
 
-    response_update_1 = client.patch(f"/recipe/update_user_recipe/{new_recipe_data["id"]}", json=new_title)
+    response_update_1 = client.patch(f"/recipe/update_user_recipe/{new_recipe_data['id']}", json=new_title)
 
     assert response_update_1.status_code == 200
 
-    response_update_2 = client.patch(f"/recipe/update_user_recipe/{new_recipe_data["id"]}", json=new_title_description)
+    response_update_2 = client.patch(f"/recipe/update_user_recipe/{new_recipe_data['id']}", json=new_title_description)
 
     assert response_update_2.status_code == 200
 
-    response_update_3 = client.patch(f"/recipe/update_user_recipe/{new_recipe_data["id"]}", json=new_title_description_category)
+    response_update_3 = client.patch(f"/recipe/update_user_recipe/{new_recipe_data['id']}", json=new_title_description_category)
 
     assert response_update_3.status_code == 200
 
@@ -113,7 +113,7 @@ def test_get_user_recipe(client, create_users, add_recipe):
 
     assert response_recipe.status_code == 200
 
-    response_get_user_recipe = client.get(f"/recipe/get_user_recipe/{response_recipe.json()["id"]}")
+    response_get_user_recipe = client.get(f"/recipe/get_user_recipe/{response_recipe.json()['id']}")
 
     assert response_recipe.status_code == 200
 
